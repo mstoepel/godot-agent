@@ -25,8 +25,17 @@ def test_fixtures_are_present() -> None:
 
 @pytest.mark.parametrize("path", SCENE_FILES, ids=lambda p: p.name)
 def test_round_trips_byte_for_byte(path: Path) -> None:
-    """An untouched engine-written scene must reproduce exactly."""
-    original = path.read_text(encoding="utf-8")
+    """An untouched engine-written scene must reproduce exactly.
+
+    Read as raw bytes, not via ``read_text``: universal-newline translation
+    would normalize a CRLF checkout to LF on the way in and make this pass
+    without the writer actually being byte-accurate. ``.gitattributes`` pins
+    these files to LF so the comparison is meaningful.
+    """
+    original = path.read_bytes().decode("utf-8")
+    assert "\r\n" not in original, (
+        f"{path.name} was checked out with CRLF; .gitattributes should pin it to LF"
+    )
     assert parse_tscn(original).dumps() == original
 
 
