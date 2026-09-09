@@ -1,0 +1,14 @@
+{
+  "name": "godot-agent",
+  "version": "0.1.0",
+  "description": "Godot 4 game development: scene editing, headless runs, gdUnit4 testing and asset integration.",
+  "author": "godot-agent",
+  "skills": "./skills",
+  "mcpServers": "./.mcp.json",
+  "hooks": "./hooks/hooks.json",
+  "extensions": {
+    "com.langchain.deepagents.code": {
+      "pythonExtensions": "./extension.py"
+    }
+  }
+}

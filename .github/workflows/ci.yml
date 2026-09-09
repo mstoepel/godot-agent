@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Lint
+        run: uv run ruff check .
+
+      # No Godot binary and no API keys: the suite is designed to be fully
+      # exercisable without either, via the placeholder provider and the mock
+      # bridge server.
+      - name: Test
+        run: uv run pytest -q -m "not godot and not network"
+
+      - name: Check the dcode profile is in sync with the prompts
+        run: |
+          uv run godot-agent sync-profile
+          git diff --exit-code dcode-profile/

@@ -1,0 +1,13 @@
+{
+  "name": "godot-agent",
+  "owner": {
+    "name": "godot-agent"
+  },
+  "plugins": [
+    {
+      "name": "godot-agent",
+      "source": "./plugin",
+      "description": "Godot 4 game development tools, skills and validation hooks for dcode."
+    }
+  ]
+}

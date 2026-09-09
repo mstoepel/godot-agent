@@ -1,0 +1,64 @@
+[project]
+name = "godot-agent"
+version = "0.1.0"
+description = "A specialized coding agent for Godot Engine game development, built on LangChain Deep Agents."
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+license = { text = "MIT" }
+authors = [{ name = "Michael Stoepel" }]
+keywords = ["godot", "gamedev", "agent", "langchain", "deepagents", "dcode"]
+
+dependencies = [
+    "deepagents>=0.7.13,<0.8",
+    "langchain>=1.4.0,<2",
+    "mcp>=2.2.0,<3",
+    "httpx>=0.28",
+    "pillow>=11.0",
+    "pydantic>=2.9",
+    "typer>=0.15",
+    "rich>=13.9",
+]
+
+[project.optional-dependencies]
+anthropic = ["langchain-anthropic>=1.0"]
+openai = ["langchain-openai>=1.0"]
+google = ["langchain-google-genai>=3.0"]
+
+[project.scripts]
+godot-agent = "godot_agent.cli:main"
+godot-agent-mcp = "godot_agent_mcp.server:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "ruff>=0.9",
+    "mypy>=1.14",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/godot_agent", "src/godot_agent_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "godot: requires a real Godot binary on PATH or GODOT_BIN (deselect with -m 'not godot')",
+    "network: hits a live external API (deselect with -m 'not network')",
+]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["godot_agent", "godot_agent_mcp"]
+ignore_missing_imports = true

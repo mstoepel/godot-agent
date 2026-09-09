@@ -1,0 +1,64 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "godot-agent hook session-start",
+            "timeout": 30,
+            "statusMessage": "Reading Godot project"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "godot-agent hook guard-write",
+            "timeout": 15,
+            "statusMessage": "Checking write target"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "godot-agent hook guard-write",
+            "timeout": 15,
+            "statusMessage": "Checking edit target"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "godot-agent hook validate",
+            "timeout": 90,
+            "statusMessage": "Validating Godot file"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "godot-agent hook validate",
+            "timeout": 90,
+            "statusMessage": "Validating Godot file"
+          }
+        ]
+      }
+    ]
+  }
+}
